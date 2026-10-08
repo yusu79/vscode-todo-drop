@@ -1,0 +1,17 @@
+{
+  "Drop Markdown or txt files here": "Drop Markdown or txt files here",
+  "Add Files": "Add Files",
+  "Please drop Markdown or txt files.": "Please drop Markdown or txt files.",
+  "Markdown / Text": "Markdown / Text",
+  "Add to Todo Drop": "Add to Todo Drop",
+  "Please add Markdown or txt files.": "Please add Markdown or txt files.",
+  "Open Source File": "Open Source File",
+  "{0} (completed)": "{0} (completed)",
+  "{0} (incomplete)": "{0} (incomplete)",
+  "No incomplete tasks.": "No incomplete tasks.",
+  "No checklist found. Example: - [ ] todo": "No checklist found. Example: - [ ] todo",
+  "Unable to read the file. Refresh or remove it from the list.": "Unable to read the file. Refresh or remove it from the list.",
+  "The list has been updated. Please select the current item again.": "The list has been updated. Please select the current item again.",
+  "The source file has changed. Please select the current item again.": "The source file has changed. Please select the current item again.",
+  "Unable to update the source file.": "Unable to update the source file."
+}

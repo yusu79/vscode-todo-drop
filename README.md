@@ -1,71 +1,120 @@
-# vscode-todo-drop README
+# Todo Drop
 
-This is the README for your extension "vscode-todo-drop". After writing up a brief description, we recommend including the following sections.
+[English](#todo-drop) | [日本語](#日本語)
+
+A VS Code extension that displays Markdown and text checklists in a dedicated **Todo Drop** view in Explorer. Checking a task updates its source document.
+
+## Installation
+
+Search for “**Todo Drop**” in the Visual Studio Code Marketplace and install the extension.
+
+
+## Example
+
+Drop a `.md`, `.markdown`, or `.txt` file .
+
+<p align="center">
+<img src="./images/drop_example_en.png" width="50%"/>
+</p>
+
+
+Check a task in Todo Drop to update its source:
+
+```markdown
+- [x] Write the proposal
+- [ ] Review the changes
+```
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- Multiple source files, remembered per workspace.
+- Check and uncheck tasks directly in Explorer.
+- Three completion styles: checkbox, strikethrough, and strikethrough with a local date.
+- Nested tasks follow the source indentation. Completed tasks are hidden by default without deleting source lines.
+- Completed task labels are gray for every source completion style.
+- Updates from source-document edits; stale clicks are rejected to avoid modifying the wrong line.
 
-For example if there is an image subfolder under your extension project workspace:
+## Usage
 
-\!\[feature X\]\(images/feature-x.png\)
+1. Open **Todo Drop** in Explorer.
+2. Drop files from VS Code Explorer directly onto the **Todo Drop** list, including existing file or task rows and empty space. No modifier key is needed. You can also use the **+** button, the `Todo Drop: Add Files` command, or the Explorer context menu.
+3. Check or uncheck a task using the checkbox to its left.
+4. Save the source document to persist the change to disk. Edits use VS Code's Undo history; Todo Drop does not automatically save.
+5. Click the file name to open the source. Click the **×** beside the file name to remove it from the view without deleting the file.
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+Checking changes only the selected task, leaving unfinished children visible even when their parent is hidden. To show completed tasks in gray without strikethrough, disable `todoDrop.hideCompleted`. You can then uncheck them in the view, or edit the source directly.
 
-## Requirements
+## Explanation
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+Supported task markers include `- [ ]`, `* [ ]`, `+ [ ]`, `1. [ ]`, and `1) [ ]`, including nested tasks. Completed markers `[x]` and `[X]` are recognized. Fenced code blocks are excluded. Ordinary bullet lists are left as-is. Task labels are displayed as plain text.
 
-## Extension Settings
+The date format is `YYYY-MM-DD`, using the extension host's local date. Unchecking removes whole-task strikethrough and an optional trailing date in the generated format. Original indentation, spacing, and line endings are preserved. Unavailable files are shown with an error and can be removed or refreshed.
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+Completed labels use VS Code's file decoration colors . Their gray color follows the theme and can be customized with `todoDrop.completedForeground` in `workbench.colorCustomizations`. Source file names and incomplete tasks keep their usual color.
 
-For example:
+## Settings
 
-This extension contributes the following settings:
+| Setting | Default | Description |
+| --- | --- | --- |
+| `todoDrop.completionStyle` | `checkbox` | `- [x] todo` |
+| `todoDrop.hideCompleted` | `true` | Hide completed tasks in the view. |
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+## 日本語
 
-## Known Issues
+[English](#todo-drop) | [日本語](#日本語)
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+Markdown・txtのチェックリストを、VS Codeのエクスプローラー内の専用欄 **Todo Drop** に表示する拡張機能です。専用欄でチェックすると、元のドキュメントにも反映します。
 
-## Release Notes
+## インストール
 
-Users appreciate release notes as you update your extension.
+Visual Studio CodeのMarketplaceで「**Todo Drop**」を検索してインストールしてください。
 
-### 1.0.0
+## 使用例
 
-Initial release of ...
+`.md`・`.markdown`・`.txt` ファイルをドロップします。
 
-### 1.0.1
+<p align="center">
+<img src="./images/drop_example_jp.png" width="50%"/>
+</p>
 
-Fixed issue #.
 
-### 1.1.0
+専用欄でチェックすると、元ファイルは次のようになります。
 
-Added features X, Y, and Z.
+```markdown
+- [x] 提案書を書く
+- [ ] 変更内容を確認する
+```
 
----
+## 機能
 
-## Following extension guidelines
+- 複数ファイルに対応し、登録内容をワークスペースごとに記憶します。
+- エクスプローラー内でToDoをチェック・解除できます。
+- 完了形式をチェックのみ・取り消し線付き・取り消し線＋日付から選べます。
+- 元ファイルのインデントに沿ってToDoの階層を表示します。完了項目は既定で非表示になり、元ファイルの行は削除しません。
+- 元ファイルの完了形式にかかわらず、完了したToDoの文字を灰色で表示します。
+- 元ドキュメントの編集を反映し、古い表示に対するクリックによる誤更新を防ぎます。
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+## 使用方法
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+1. エクスプローラーの **Todo Drop** を開きます。
+2. VS Codeのエクスプローラーから **Todo Drop** のリストへ直接ファイルをドロップします。ファイル行・ToDo行・空白部分でも受け取れます。Shiftなどの修飾キーは不要です。**+** ボタン、`Todo Drop: ファイルを追加` コマンド、エクスプローラーの右クリックメニューも使えます。
+3. ToDoの左側にあるチェック欄でチェック・解除します。
+4. ディスクへ保存するには元ドキュメントを保存します。変更はVS CodeのUndoに対応し、自動保存は行いません。
+5. ファイル名をクリックすると元ファイルを開きます。ファイル名の横の **×** は専用欄の登録だけを解除し、ファイルは削除しません。
 
-## Working with Markdown
+チェックは選択した項目だけに反映します。完了した親を隠しても、未完了の子は表示を残します。完了項目を打ち消し線なしの灰色で再表示するには、`todoDrop.hideCompleted` を無効にしてください。再表示した項目は専用欄でチェックを解除でき、元ファイルを直接編集して解除することもできます。
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+## 解説
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+`- [ ]`・`* [ ]`・`+ [ ]`・`1. [ ]`・`1) [ ]` の形式と、入れ子のToDoに対応します。完了は `[x]`・`[X]` として認識します。フェンス付きコードブロック内は除外し、通常の箇条書きは変換しません。専用欄のラベルはプレーンテキストで表示します。
 
-## For more information
+日付は拡張ホストのローカル日付を使い、`YYYY-MM-DD` で記録します。チェック解除時は、生成形式に一致する項目全体の取り消し線と末尾の日付を取り除きます。インデント・空白・改行コードは維持します。読み込めないファイルはエラーを表示し、再読み込みや登録解除ができます。
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+完了項目の灰色表示はVS Codeのファイル装飾色を使います。テーマに応じた灰色で表示し、`workbench.colorCustomizations` の `todoDrop.completedForeground` で色を変更できます。元ファイルの名前や未完了項目は通常の文字色で表示します。
 
-**Enjoy!**
+## 設定オプション
+
+| 設定 | 既定値 | 内容 |
+| --- | --- | --- |
+| `todoDrop.completionStyle` | `checkbox` | `- [x] todo` |
+| `todoDrop.hideCompleted` | `true` | 専用欄の完了項目を非表示にします。 |

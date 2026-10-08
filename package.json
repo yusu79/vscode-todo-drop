@@ -2,23 +2,131 @@
   "private": true,
   "name": "vscode-todo-drop",
   "displayName": "Todo Drop",
-  "description": "Drop a Markdown file into the Todo Drop view to display its task list.",
-  "version": "0.0.1",
+  "description": "Drop Markdown and text checklists into Explorer and sync task completion with source files.",
+  "version": "1.0.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yusu79/vscode-todo-drop.git"
+  },
+  "publisher": "yusu79",
+  "author": {
+    "name": "yusu79",
+    "email": "oss@yusu79.com",
+    "url": "https://github.com/yusu79"
+  },
+  "sponsor": {
+    "url": "https://github.com/sponsors/yusu79"
+  },
+  "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.140.0"
   },
   "categories": [
     "Other"
   ],
+  "l10n": "./l10n",
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
+    "colors": [
+      {
+        "id": "todoDrop.completedForeground",
+        "description": "%completedForeground.description%",
+        "defaults": {
+          "dark": "#888888",
+          "light": "#767676",
+          "highContrast": "#A0A0A0",
+          "highContrastLight": "#595959"
+        }
+      }
+    ],
     "commands": [
       {
-        "command": "vscode-todo-drop.helloWorld",
-        "title": "Hello World"
+        "command": "vscode-todo-drop.addFiles",
+        "title": "%vscode-todo-drop.addFiles.title%",
+        "icon": "$(add)"
+      },
+      {
+        "command": "vscode-todo-drop.refresh",
+        "title": "%vscode-todo-drop.refresh.title%",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "vscode-todo-drop.removeFile",
+        "title": "%vscode-todo-drop.removeFile.title%",
+        "icon": "$(close)"
       }
-    ]
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "vscode-todo-drop.todos",
+          "name": "Todo Drop",
+          "type": "tree",
+          "contextualTitle": "Todo Drop"
+        }
+      ]
+    },
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "vscode-todo-drop.removeFile",
+          "when": "false"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "vscode-todo-drop.addFiles",
+          "when": "view == vscode-todo-drop.todos",
+          "group": "navigation"
+        },
+        {
+          "command": "vscode-todo-drop.refresh",
+          "when": "view == vscode-todo-drop.todos",
+          "group": "navigation"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "vscode-todo-drop.addFiles",
+          "when": "resourceExtname =~ /\\.(md|markdown|txt)$/i",
+          "group": "navigation@90"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "vscode-todo-drop.removeFile",
+          "when": "view == vscode-todo-drop.todos && viewItem == todoDrop.file",
+          "group": "inline"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Todo Drop",
+      "properties": {
+        "todoDrop.completionStyle": {
+          "type": "string",
+          "enum": [
+            "checkbox",
+            "strikethrough",
+            "strikethroughDate"
+          ],
+          "default": "checkbox",
+          "enumDescriptions": [
+            "%completionStyle.checkbox%",
+            "%completionStyle.strikethrough%",
+            "%completionStyle.strikethroughDate%"
+          ],
+          "description": "%completionStyle.description%"
+        },
+        "todoDrop.hideCompleted": {
+          "type": "boolean",
+          "default": true,
+          "description": "%hideCompleted.description%"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
@@ -31,19 +139,21 @@
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "check-types": "tsc --noEmit",
-    "lint": "eslint src",
+    "lint": "eslint src test",
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.140.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
-    "typescript-eslint": "^8.56.1",
-    "eslint": "^9.39.3",
-    "esbuild": "^0.27.3",
-    "npm-run-all": "^4.1.5",
-    "typescript": "^5.9.3",
+    "@types/vscode": "^1.140.0",
     "@vscode/test-cli": "^0.0.12",
-    "@vscode/test-electron": "^2.5.2"
+    "@vscode/test-electron": "^2.5.2",
+    "@vscode/vsce": "^4.0.0",
+    "esbuild": "^0.27.3",
+    "eslint": "^9.39.3",
+    "npm-run-all": "^4.1.5",
+    "ovsx": "^1.2.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.56.1"
   }
 }

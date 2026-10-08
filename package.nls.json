@@ -1,0 +1,11 @@
+{
+  "completedForeground.description": "Text color of completed tasks in Todo Drop.",
+  "vscode-todo-drop.addFiles.title": "Todo Drop: Add Files",
+  "vscode-todo-drop.refresh.title": "Todo Drop: Refresh",
+  "vscode-todo-drop.removeFile.title": "Todo Drop: Remove from List",
+  "completionStyle.checkbox": "Checkbox only: - [x] todo",
+  "completionStyle.strikethrough": "Strikethrough: - [x] ~~todo~~",
+  "completionStyle.strikethroughDate": "Strikethrough and date: - [x] ~~todo~~ [YYYY-MM-DD]",
+  "completionStyle.description": "Completion format applied to source files.",
+  "hideCompleted.description": "Hide completed tasks from the Todo Drop view."
+}
