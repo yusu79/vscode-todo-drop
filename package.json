@@ -2,7 +2,7 @@
   "private": true,
   "name": "vscode-todo-drop",
   "displayName": "Todo Drop",
-  "description": "Drop a Markdown file into the Todo Drop view to display its task list.",
+  "description": "Drop Markdown and text checklists into Explorer and sync task completion with source files.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.140.0"
@@ -13,12 +13,104 @@
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
+    "colors": [
+      {
+        "id": "todoDrop.completedForeground",
+        "description": "Todo Dropの完了したToDoの文字色。",
+        "defaults": {
+          "dark": "#888888",
+          "light": "#767676",
+          "highContrast": "#A0A0A0",
+          "highContrastLight": "#595959"
+        }
+      }
+    ],
     "commands": [
       {
-        "command": "vscode-todo-drop.helloWorld",
-        "title": "Hello World"
+        "command": "vscode-todo-drop.addFiles",
+        "title": "Todo Drop: ファイルを追加",
+        "icon": "$(add)"
+      },
+      {
+        "command": "vscode-todo-drop.refresh",
+        "title": "Todo Drop: 再読み込み",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "vscode-todo-drop.removeFile",
+        "title": "Todo Drop: リストから外す",
+        "icon": "$(close)"
       }
-    ]
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "vscode-todo-drop.todos",
+          "name": "Todo Drop",
+          "type": "tree",
+          "contextualTitle": "Todo Drop"
+        }
+      ]
+    },
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "vscode-todo-drop.removeFile",
+          "when": "false"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "vscode-todo-drop.addFiles",
+          "when": "view == vscode-todo-drop.todos",
+          "group": "navigation"
+        },
+        {
+          "command": "vscode-todo-drop.refresh",
+          "when": "view == vscode-todo-drop.todos",
+          "group": "navigation"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "vscode-todo-drop.addFiles",
+          "when": "resourceExtname =~ /\\.(md|markdown|txt)$/i",
+          "group": "navigation@90"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "vscode-todo-drop.removeFile",
+          "when": "view == vscode-todo-drop.todos && viewItem == todoDrop.file",
+          "group": "inline"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Todo Drop",
+      "properties": {
+        "todoDrop.completionStyle": {
+          "type": "string",
+          "enum": [
+            "checkbox",
+            "strikethrough",
+            "strikethroughDate"
+          ],
+          "default": "checkbox",
+          "enumDescriptions": [
+            "チェックのみ: - [x] todo",
+            "取り消し線: - [x] ~~todo~~",
+            "取り消し線と日付: - [x] ~~todo~~ [YYYY-MM-DD]"
+          ],
+          "description": "元ファイルに反映する完了形式。"
+        },
+        "todoDrop.hideCompleted": {
+          "type": "boolean",
+          "default": true,
+          "description": "完了した項目を専用欄から非表示にします。"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
@@ -31,7 +123,7 @@
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "check-types": "tsc --noEmit",
-    "lint": "eslint src",
+    "lint": "eslint src test",
     "test": "vscode-test"
   },
   "devDependencies": {
