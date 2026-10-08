@@ -1,0 +1,11 @@
+{
+  "completedForeground.description": "Todo Dropの完了したToDoの文字色。",
+  "vscode-todo-drop.addFiles.title": "Todo Drop: ファイルを追加",
+  "vscode-todo-drop.refresh.title": "Todo Drop: 再読み込み",
+  "vscode-todo-drop.removeFile.title": "Todo Drop: リストから外す",
+  "completionStyle.checkbox": "チェックのみ: - [x] todo",
+  "completionStyle.strikethrough": "取り消し線: - [x] ~~todo~~",
+  "completionStyle.strikethroughDate": "取り消し線と日付: - [x] ~~todo~~ [YYYY-MM-DD]",
+  "completionStyle.description": "元ファイルに反映する完了形式。",
+  "hideCompleted.description": "完了した項目を専用欄から非表示にします。"
+}

@@ -89,7 +89,7 @@ suite('Todo source integration', () => {
 	test('shows missing sources and rejects unsupported file types', async () => {
 		await vscode.workspace.fs.delete(uri);
 		await provider.refresh();
-		assert.match(String(provider.getChildren(file())[0].label), /ファイルを読み込めません/);
+		assert.equal(provider.getChildren(file())[0].label, vscode.l10n.t('Unable to read the file. Refresh or remove it from the list.'));
 		await vscode.workspace.fs.writeFile(uri, Buffer.from(contents));
 		await assert.rejects(provider.addFiles([uri.with({ path: uri.path + '.json' })]));
 	});
@@ -97,6 +97,7 @@ suite('Todo source integration', () => {
 		const task = tasks()[0];
 		await provider.removeFile(file());
 		assert.equal(provider.getChildren()[0].kind, 'hint');
+		assert.equal(provider.getChildren()[0].label, vscode.l10n.t('Drop Markdown or txt files here'));
 		const data = new vscode.DataTransfer();
 		data.set('text/uri-list', new vscode.DataTransferItem(uri.toString()));
 		const cancel = new vscode.CancellationTokenSource();
@@ -111,6 +112,7 @@ suite('Todo source integration', () => {
 			cancel.cancel();
 			await provider.handleDrop(undefined, data, cancel.token);
 			assert.equal(provider.getChildren()[0].kind, 'hint');
+			assert.equal(provider.getChildren()[0].label, vscode.l10n.t('Drop Markdown or txt files here'));
 			assert.deepEqual(storage.get('todoDrop.files'), []);
 		} finally { cancel.dispose(); }
 	});
@@ -153,7 +155,7 @@ suite('Todo source integration', () => {
 				await provider.handleCheckboxChange({ items: [[tasks()[0], vscode.TreeItemCheckboxState.Checked]] });
 				const completed = tasks()[0];
 				assert.equal(completed.label, 'first');
-				assert.equal(completed.accessibilityInformation?.label, 'first (完了)');
+				assert.equal(completed.accessibilityInformation?.label, vscode.l10n.t('{0} (completed)', 'first'));
 				assert.equal(provider.provideFileDecoration(completed.resourceUri!)?.color?.id, 'todoDrop.completedForeground');
 				assert.equal(tasks()[1].resourceUri, undefined);
 				assert.equal(provider.provideFileDecoration(uri), undefined);
@@ -190,7 +192,7 @@ suite('Todo source integration', () => {
 	test('shows an empty-list hint when all tasks are completed and restores gray plain labels on request', async () => {
 		await provider.handleCheckboxChange({ items: tasks().map(item => [item, vscode.TreeItemCheckboxState.Checked]) });
 		assert.equal(tasks().length, 0);
-		assert.match(String(provider.getChildren(file())[0].label), /未完了のToDoはありません/);
+		assert.equal(provider.getChildren(file())[0].label, vscode.l10n.t('No incomplete tasks.'));
 		const document = await vscode.workspace.openTextDocument(uri);
 		assert.equal(document.getText(), '- [x] first\r\n- [x] second\r\n');
 		await vscode.workspace.getConfiguration('todoDrop').update('hideCompleted', false, vscode.ConfigurationTarget.Workspace);

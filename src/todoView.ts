@@ -77,10 +77,10 @@ export class TodoViewProvider implements vscode.TreeDataProvider<TodoItem>, vsco
 	getChildren(element?: TodoItem): TodoItem[] {
 		if (element) { return this.items.get(element.id ?? '')?.children ?? []; }
 		if (this.roots.length) { return this.roots; }
-		const hint = new TodoItem('ここにMarkdown・txtファイルをドロップ', 'hint');
+		const hint = new TodoItem(vscode.l10n.t('Drop Markdown or txt files here'), 'hint');
 		hint.id = 'todo-drop-hint';
 		hint.iconPath = new vscode.ThemeIcon('cloud-download');
-		hint.command = { command: 'vscode-todo-drop.addFiles', title: 'ファイルを追加' };
+		hint.command = { command: 'vscode-todo-drop.addFiles', title: vscode.l10n.t('Add Files') };
 		return [hint];
 	}
 
@@ -89,7 +89,7 @@ export class TodoViewProvider implements vscode.TreeDataProvider<TodoItem>, vsco
 			const uris = await readDroppedFiles(data, token);
 			if (token.isCancellationRequested) { return; }
 			if (!uris.length) {
-				await vscode.window.showWarningMessage('Markdownまたはtxtファイルをドロップしてください。');
+				await vscode.window.showWarningMessage(vscode.l10n.t('Please drop Markdown or txt files.'));
 				return;
 			}
 			await this.addFiles(uris);
@@ -116,12 +116,12 @@ export class TodoViewProvider implements vscode.TreeDataProvider<TodoItem>, vsco
 	async addFiles(uris?: readonly vscode.Uri[]): Promise<void> {
 		const selected = uris ?? await vscode.window.showOpenDialog({
 			canSelectMany: true, canSelectFolders: false,
-			filters: { 'Markdown / Text': ['md', 'markdown', 'txt'] },
-			openLabel: 'Todo Dropへ追加'
+			filters: { [vscode.l10n.t('Markdown / Text')]: ['md', 'markdown', 'txt'] },
+			openLabel: vscode.l10n.t('Add to Todo Drop')
 		});
 		if (!selected) { return; }
 		for (const uri of selected) {
-			if (!this.supported(uri)) { throw new Error('Markdownまたはtxtファイルを追加してください。'); }
+			if (!this.supported(uri)) { throw new Error(vscode.l10n.t('Please add Markdown or txt files.')); }
 			await vscode.workspace.openTextDocument(uri);
 		}
 		for (const uri of selected) { this.files.set(uri.toString(), uri); }
@@ -153,7 +153,7 @@ export class TodoViewProvider implements vscode.TreeDataProvider<TodoItem>, vsco
 			file.contextValue = 'todoDrop.file';
 			file.resourceUri = uri;
 			file.tooltip = uri.fsPath;
-			file.command = { command: 'vscode.open', title: '元ファイルを開く', arguments: [uri] };
+			file.command = { command: 'vscode.open', title: vscode.l10n.t('Open Source File'), arguments: [uri] };
 			try {
 				// stat first so a deleted but still-open document is shown as unavailable.
 				await vscode.workspace.fs.stat(uri);
@@ -180,15 +180,15 @@ export class TodoViewProvider implements vscode.TreeDataProvider<TodoItem>, vsco
 					}
 					item.checkboxState = task.checked ? vscode.TreeItemCheckboxState.Checked : vscode.TreeItemCheckboxState.Unchecked;
 					item.tooltip = task.label;
-					item.accessibilityInformation = { label: task.label + (task.checked ? ' (完了)' : ' (未完了)') };
+					item.accessibilityInformation = { label: task.checked ? vscode.l10n.t('{0} (completed)', task.label) : vscode.l10n.t('{0} (incomplete)', task.label) };
 					parent.children.push(item);
 					parent.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
 				}
 				if (!file.children.length) {
-					file.children.push(new TodoItem(tasks.length ? '未完了のToDoはありません。' : 'チェックリストが見つかりません。例: - [ ] todo', 'hint'));
+					file.children.push(new TodoItem(tasks.length ? vscode.l10n.t('No incomplete tasks.') : vscode.l10n.t('No checklist found. Example: - [ ] todo'), 'hint'));
 				}
 			} catch (error) {
-				const hint = new TodoItem('ファイルを読み込めません。再読み込みするか、リストから外してください。', 'hint');
+				const hint = new TodoItem(vscode.l10n.t('Unable to read the file. Refresh or remove it from the list.'), 'hint');
 				hint.iconPath = new vscode.ThemeIcon('warning');
 				hint.tooltip = String(error);
 				file.children.push(hint);
@@ -218,18 +218,18 @@ export class TodoViewProvider implements vscode.TreeDataProvider<TodoItem>, vsco
 		const edit = new vscode.WorkspaceEdit();
 		for (const { id, checked } of changes) {
 			const snapshot = this.snapshots.get(id);
-			if (!snapshot) { throw new Error('リストが更新されています。最新の項目をもう一度選択してください。'); }
+			if (!snapshot) { throw new Error(vscode.l10n.t('The list has been updated. Please select the current item again.')); }
 			await vscode.workspace.fs.stat(snapshot.uri);
 			const document = await vscode.workspace.openTextDocument(snapshot.uri);
 			if (document.version !== snapshot.version || document.lineAt(snapshot.task.line).text !== snapshot.task.raw) {
 				await this.refresh();
-				throw new Error('元ファイルが変更されています。最新の項目をもう一度選択してください。');
+				throw new Error(vscode.l10n.t('The source file has changed. Please select the current item again.'));
 			}
 			const config = vscode.workspace.getConfiguration('todoDrop', snapshot.uri);
 			const style = config.get<CompletionStyle>('completionStyle', 'checkbox');
 			edit.replace(snapshot.uri, document.lineAt(snapshot.task.line).range, formatTask(snapshot.task, checked, style));
 		}
-		if (!await vscode.workspace.applyEdit(edit)) { throw new Error('元ファイルを更新できませんでした。'); }
+		if (!await vscode.workspace.applyEdit(edit)) { throw new Error(vscode.l10n.t('Unable to update the source file.')); }
 		await this.refresh();
 	}
 

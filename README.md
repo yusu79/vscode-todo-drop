@@ -6,16 +6,17 @@ A VS Code extension that displays Markdown and text checklists in a dedicated **
 
 ## Installation
 
-This project is under development. Open the repository in VS Code, run `npm install` and `npm run compile`, then press F5 to launch the Extension Development Host. The current manifest requires VS Code 1.140.0 or newer.
+Search for “**Todo Drop**” in the Visual Studio Code Marketplace and install the extension.
+
 
 ## Example
 
-Drop a `.md`, `.markdown`, or `.txt` file containing:
+Drop a `.md`, `.markdown`, or `.txt` file .
 
-```markdown
-- [ ] Write the proposal
-- [ ] Review the changes
-```
+<p align="center">
+<img src="./images/drop_example_en.png" width="50%"/>
+</p>
+
 
 Check a task in Todo Drop to update its source:
 
@@ -36,12 +37,12 @@ Check a task in Todo Drop to update its source:
 ## Usage
 
 1. Open **Todo Drop** in Explorer.
-2. Drop files from VS Code Explorer directly onto the **Todo Drop** list, including existing file or task rows and empty space. No modifier key is needed. You can also use the **+** button, the `Todo Drop: ファイルを追加` command, or the Explorer context menu.
+2. Drop files from VS Code Explorer directly onto the **Todo Drop** list, including existing file or task rows and empty space. No modifier key is needed. You can also use the **+** button, the `Todo Drop: Add Files` command, or the Explorer context menu.
 3. Check or uncheck a task using the checkbox to its left.
 4. Save the source document to persist the change to disk. Edits use VS Code's Undo history; Todo Drop does not automatically save.
 5. Click the file name to open the source. Click the **×** beside the file name to remove it from the view without deleting the file.
 
-Checking changes only the selected task, leaving unfinished children visible even when their parent is hidden. To show completed tasks in gray without strikethrough, disable `todoDrop.hideCompleted` or edit the source to uncheck them.
+Checking changes only the selected task, leaving unfinished children visible even when their parent is hidden. To show completed tasks in gray without strikethrough, disable `todoDrop.hideCompleted`. You can then uncheck them in the view, or edit the source directly.
 
 ## Explanation
 
@@ -49,29 +50,13 @@ Supported task markers include `- [ ]`, `* [ ]`, `+ [ ]`, `1. [ ]`, and `1) [ ]`
 
 The date format is `YYYY-MM-DD`, using the extension host's local date. Unchecking removes whole-task strikethrough and an optional trailing date in the generated format. Original indentation, spacing, and line endings are preserved. Unavailable files are shown with an error and can be removed or refreshed.
 
-The list uses VS Code's native TreeView and drag-and-drop API. Completion animations are currently unavailable. If a source does not expose a usable file URI, choose the original file with **ファイルを追加**.
-
-Completed labels use VS Code's file decoration colors (`explorer.decorations.colors`). Their gray color follows the theme and can be customized with `todoDrop.completedForeground` in `workbench.colorCustomizations`. Source file names and incomplete tasks keep their usual color.
-
-
-### Development checks
-
-Tests run in an isolated Extension Development Host. Point `TODO_DROP_TEST_WORKSPACE` at a folder under your project-materials `test-workspace`:
-
-```powershell
-$env:TODO_DROP_TEST_WORKSPACE = 'C:\path\to\project-materials\test-workspace\todo-drop'
-# Optional: use an existing compatible VS Code installation.
-$env:TODO_DROP_VSCODE_PATH = 'C:\Program Files\Microsoft VS Code\Code.exe'
-npm test
-npm run lint
-npm run package
-```
+Completed labels use VS Code's file decoration colors . Their gray color follows the theme and can be customized with `todoDrop.completedForeground` in `workbench.colorCustomizations`. Source file names and incomplete tasks keep their usual color.
 
 ## Settings
 
 | Setting | Default | Description |
 | --- | --- | --- |
-| `todoDrop.completionStyle` | `checkbox` | `checkbox`: `- [x] todo`; `strikethrough`: `- [x] ~~todo~~`; `strikethroughDate`: `- [x] ~~todo~~ [YYYY-MM-DD]` |
+| `todoDrop.completionStyle` | `checkbox` | `- [x] todo` |
 | `todoDrop.hideCompleted` | `true` | Hide completed tasks in the view. |
 
 ## 日本語
@@ -82,16 +67,16 @@ Markdown・txtのチェックリストを、VS Codeのエクスプローラー�
 
 ## インストール
 
-現在は開発中です。リポジトリをVS Codeで開き、`npm install` と `npm run compile` を実行し、F5で拡張機能開発ホストを起動します。現在のマニフェストはVS Code 1.140.0以降を対象としています。
+Visual Studio CodeのMarketplaceで「**Todo Drop**」を検索してインストールしてください。
 
 ## 使用例
 
-次の内容を持つ `.md`・`.markdown`・`.txt` ファイルをドロップします。
+`.md`・`.markdown`・`.txt` ファイルをドロップします。
 
-```markdown
-- [ ] 提案書を書く
-- [ ] 変更内容を確認する
-```
+<p align="center">
+<img src="./images/drop_example_jp.png" width="50%"/>
+</p>
+
 
 専用欄でチェックすると、元ファイルは次のようになります。
 
@@ -117,7 +102,7 @@ Markdown・txtのチェックリストを、VS Codeのエクスプローラー�
 4. ディスクへ保存するには元ドキュメントを保存します。変更はVS CodeのUndoに対応し、自動保存は行いません。
 5. ファイル名をクリックすると元ファイルを開きます。ファイル名の横の **×** は専用欄の登録だけを解除し、ファイルは削除しません。
 
-チェックは選択した項目だけに反映します。完了した親を隠しても、未完了の子は表示を残します。完了項目を打ち消し線なしの灰色で再表示するには、`todoDrop.hideCompleted` を無効にするか、元ファイルを編集してチェックを解除してください。
+チェックは選択した項目だけに反映します。完了した親を隠しても、未完了の子は表示を残します。完了項目を打ち消し線なしの灰色で再表示するには、`todoDrop.hideCompleted` を無効にしてください。再表示した項目は専用欄でチェックを解除でき、元ファイルを直接編集して解除することもできます。
 
 ## 解説
 
@@ -125,27 +110,11 @@ Markdown・txtのチェックリストを、VS Codeのエクスプローラー�
 
 日付は拡張ホストのローカル日付を使い、`YYYY-MM-DD` で記録します。チェック解除時は、生成形式に一致する項目全体の取り消し線と末尾の日付を取り除きます。インデント・空白・改行コードは維持します。読み込めないファイルはエラーを表示し、再読み込みや登録解除ができます。
 
-リストはVS Code標準のTreeViewとドロップAPIを使います。完了アニメーションは現在利用できません。ドロップ元からファイルのURIが渡らない場合は **ファイルを追加** から元ファイルを選択してください。
-
-完了項目の灰色表示はVS Codeのファイル装飾色（`explorer.decorations.colors`）を使います。テーマに応じた灰色で表示し、`workbench.colorCustomizations` の `todoDrop.completedForeground` で色を変更できます。元ファイルの名前や未完了項目は通常の文字色で表示します。
-
-
-### 開発時の検証
-
-テストは隔離した拡張機能開発ホストで実行します。`TODO_DROP_TEST_WORKSPACE` にプロジェクト資料の `test-workspace` 内のフォルダを指定します。
-
-```powershell
-$env:TODO_DROP_TEST_WORKSPACE = 'C:\path\to\project-materials\test-workspace\todo-drop'
-# 任意: 対応する既存のVS Codeを使う場合に指定します。
-$env:TODO_DROP_VSCODE_PATH = 'C:\Program Files\Microsoft VS Code\Code.exe'
-npm test
-npm run lint
-npm run package
-```
+完了項目の灰色表示はVS Codeのファイル装飾色を使います。テーマに応じた灰色で表示し、`workbench.colorCustomizations` の `todoDrop.completedForeground` で色を変更できます。元ファイルの名前や未完了項目は通常の文字色で表示します。
 
 ## 設定オプション
 
 | 設定 | 既定値 | 内容 |
 | --- | --- | --- |
-| `todoDrop.completionStyle` | `checkbox` | `checkbox`: `- [x] todo`、`strikethrough`: `- [x] ~~todo~~`、`strikethroughDate`: `- [x] ~~todo~~ [YYYY-MM-DD]` |
+| `todoDrop.completionStyle` | `checkbox` | `- [x] todo` |
 | `todoDrop.hideCompleted` | `true` | 専用欄の完了項目を非表示にします。 |

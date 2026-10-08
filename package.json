@@ -3,20 +3,36 @@
   "name": "vscode-todo-drop",
   "displayName": "Todo Drop",
   "description": "Drop Markdown and text checklists into Explorer and sync task completion with source files.",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yusu79/vscode-todo-drop.git"
+  },
+  "publisher": "yusu79",
+  "author": {
+    "name": "yusu79",
+    "email": "oss@yusu79.com",
+    "url": "https://github.com/yusu79"
+  },
+  "sponsor": {
+    "url": "https://github.com/sponsors/yusu79"
+  },
+  "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.140.0"
   },
   "categories": [
     "Other"
   ],
+  "l10n": "./l10n",
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
     "colors": [
       {
         "id": "todoDrop.completedForeground",
-        "description": "Todo Dropの完了したToDoの文字色。",
+        "description": "%completedForeground.description%",
         "defaults": {
           "dark": "#888888",
           "light": "#767676",
@@ -28,17 +44,17 @@
     "commands": [
       {
         "command": "vscode-todo-drop.addFiles",
-        "title": "Todo Drop: ファイルを追加",
+        "title": "%vscode-todo-drop.addFiles.title%",
         "icon": "$(add)"
       },
       {
         "command": "vscode-todo-drop.refresh",
-        "title": "Todo Drop: 再読み込み",
+        "title": "%vscode-todo-drop.refresh.title%",
         "icon": "$(refresh)"
       },
       {
         "command": "vscode-todo-drop.removeFile",
-        "title": "Todo Drop: リストから外す",
+        "title": "%vscode-todo-drop.removeFile.title%",
         "icon": "$(close)"
       }
     ],
@@ -98,16 +114,16 @@
           ],
           "default": "checkbox",
           "enumDescriptions": [
-            "チェックのみ: - [x] todo",
-            "取り消し線: - [x] ~~todo~~",
-            "取り消し線と日付: - [x] ~~todo~~ [YYYY-MM-DD]"
+            "%completionStyle.checkbox%",
+            "%completionStyle.strikethrough%",
+            "%completionStyle.strikethroughDate%"
           ],
-          "description": "元ファイルに反映する完了形式。"
+          "description": "%completionStyle.description%"
         },
         "todoDrop.hideCompleted": {
           "type": "boolean",
           "default": true,
-          "description": "完了した項目を専用欄から非表示にします。"
+          "description": "%hideCompleted.description%"
         }
       }
     }
@@ -127,15 +143,17 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.140.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
-    "typescript-eslint": "^8.56.1",
-    "eslint": "^9.39.3",
-    "esbuild": "^0.27.3",
-    "npm-run-all": "^4.1.5",
-    "typescript": "^5.9.3",
+    "@types/vscode": "^1.140.0",
     "@vscode/test-cli": "^0.0.12",
-    "@vscode/test-electron": "^2.5.2"
+    "@vscode/test-electron": "^2.5.2",
+    "@vscode/vsce": "^4.0.0",
+    "esbuild": "^0.27.3",
+    "eslint": "^9.39.3",
+    "npm-run-all": "^4.1.5",
+    "ovsx": "^1.2.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.56.1"
   }
 }

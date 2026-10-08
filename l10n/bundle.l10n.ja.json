@@ -1,0 +1,17 @@
+{
+  "Drop Markdown or txt files here": "ここにMarkdown・txtファイルをドロップ",
+  "Add Files": "ファイルを追加",
+  "Please drop Markdown or txt files.": "Markdownまたはtxtファイルをドロップしてください。",
+  "Markdown / Text": "Markdown / テキスト",
+  "Add to Todo Drop": "Todo Dropへ追加",
+  "Please add Markdown or txt files.": "Markdownまたはtxtファイルを追加してください。",
+  "Open Source File": "元ファイルを開く",
+  "{0} (completed)": "{0} (完了)",
+  "{0} (incomplete)": "{0} (未完了)",
+  "No incomplete tasks.": "未完了のToDoはありません。",
+  "No checklist found. Example: - [ ] todo": "チェックリストが見つかりません。例: - [ ] todo",
+  "Unable to read the file. Refresh or remove it from the list.": "ファイルを読み込めません。再読み込みするか、リストから外してください。",
+  "The list has been updated. Please select the current item again.": "リストが更新されています。最新の項目をもう一度選択してください。",
+  "The source file has changed. Please select the current item again.": "元ファイルが変更されています。最新の項目をもう一度選択してください。",
+  "Unable to update the source file.": "元ファイルを更新できませんでした。"
+}

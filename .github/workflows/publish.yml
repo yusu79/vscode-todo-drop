@@ -38,7 +38,11 @@ jobs:
           fi
 
       - name: Run tests
-        run: xvfb-run -a npm test
+        env:
+          TODO_DROP_TEST_WORKSPACE: ${{ runner.temp }}/todo-drop-tests
+        run: |
+          mkdir -p "$TODO_DROP_TEST_WORKSPACE"
+          xvfb-run -a npm test
 
       - name: Package Extension
         run: npx --no-install vsce package
